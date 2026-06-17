@@ -45,6 +45,22 @@ function uid() {
 
 const STORAGE_KEY = "calendario-editorial-v1";
 
+const CORES_PADRAO = {
+  fundo: "#000000",
+  texto: "#ffffff",
+  destaque: "#ff5b23",
+  secundario: "#8c8c8c",
+};
+
+function lerArquivo(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(String(r.result));
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+
 export default function Home() {
   const hoje = new Date();
   const [cliente, setCliente] = useState("Nome do Cliente");
@@ -54,6 +70,9 @@ export default function Home() {
   const [entradas, setEntradas] = useState<Entrada[]>([
     { id: uid(), dia: 1, titulo: "", formato: "Post Único", nota: "" },
   ]);
+  const [cores, setCores] = useState(CORES_PADRAO);
+  const [logo1, setLogo1] = useState<string>("");
+  const [logo2, setLogo2] = useState<string>("");
   const [loaded, setLoaded] = useState(false);
 
   // Carregar do localStorage
@@ -66,6 +85,9 @@ export default function Home() {
         if (typeof d.ano === "number") setAno(d.ano);
         if (typeof d.mes === "number") setMes(d.mes);
         if (d.contato !== undefined) setContato(d.contato);
+        if (d.cores) setCores({ ...CORES_PADRAO, ...d.cores });
+        if (d.logo1 !== undefined) setLogo1(d.logo1);
+        if (d.logo2 !== undefined) setLogo2(d.logo2);
         if (Array.isArray(d.entradas) && d.entradas.length) setEntradas(d.entradas);
       }
     } catch {}
@@ -77,9 +99,9 @@ export default function Home() {
     if (!loaded) return;
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ cliente, ano, mes, contato, entradas })
+      JSON.stringify({ cliente, ano, mes, contato, cores, logo1, logo2, entradas })
     );
-  }, [cliente, ano, mes, contato, entradas, loaded]);
+  }, [cliente, ano, mes, contato, cores, logo1, logo2, entradas, loaded]);
 
   const totalDias = daysInMonth(ano, mes);
 
@@ -170,6 +192,55 @@ export default function Home() {
         </div>
 
         <div className="divider" />
+        <p className="section-title">Cores</p>
+        <div className="colors">
+          <ColorField
+            label="Fundo"
+            value={cores.fundo}
+            onChange={(v) => setCores((c) => ({ ...c, fundo: v }))}
+          />
+          <ColorField
+            label="Texto"
+            value={cores.texto}
+            onChange={(v) => setCores((c) => ({ ...c, texto: v }))}
+          />
+          <ColorField
+            label="Destaque"
+            value={cores.destaque}
+            onChange={(v) => setCores((c) => ({ ...c, destaque: v }))}
+          />
+          <ColorField
+            label="Secundário"
+            value={cores.secundario}
+            onChange={(v) => setCores((c) => ({ ...c, secundario: v }))}
+          />
+        </div>
+        <button
+          className="btn"
+          style={{ marginTop: 4 }}
+          onClick={() => setCores(CORES_PADRAO)}
+        >
+          Restaurar cores padrão
+        </button>
+
+        <div className="divider" />
+        <p className="section-title">Logos (opcional)</p>
+        <div className="row2">
+          <LogoField
+            label="Logo 1"
+            value={logo1}
+            onPick={async (f) => setLogo1(await lerArquivo(f))}
+            onClear={() => setLogo1("")}
+          />
+          <LogoField
+            label="Logo 2"
+            value={logo2}
+            onPick={async (f) => setLogo2(await lerArquivo(f))}
+            onClear={() => setLogo2("")}
+          />
+        </div>
+
+        <div className="divider" />
         <p className="section-title">Conteúdos do mês</p>
 
         {entradas.map((e, idx) => (
@@ -256,17 +327,31 @@ export default function Home() {
           </button>
         </div>
 
-        <div className="poster">
+        <div
+          className="poster"
+          style={
+            {
+              "--bg": cores.fundo,
+              "--ink": cores.texto,
+              "--accent": cores.destaque,
+              "--muted": cores.secundario,
+            } as React.CSSProperties
+          }
+        >
           <div className="month-side">
             <span>{MESES[mes]}</span>
           </div>
 
           <div className="head">
             <div className="client">
+              {logo1 && <img className="logo logo1" src={logo1} alt="Logo 1" />}
               <div className="kicker">Calendário Editorial</div>
               <div className="name">{cliente || "Cliente"}</div>
             </div>
-            <div className="year">’{String(ano).slice(-2)}</div>
+            <div className="head-right">
+              {logo2 && <img className="logo logo2" src={logo2} alt="Logo 2" />}
+              <div className="year">’{String(ano).slice(-2)}</div>
+            </div>
           </div>
 
           <div className="grid">
@@ -300,6 +385,76 @@ export default function Home() {
           </div>
         </div>
       </main>
+    </div>
+  );
+}
+
+function ColorField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <div className="color-field">
+      <input
+        type="color"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        aria-label={label}
+      />
+      <div className="color-meta">
+        <span className="color-label">{label}</span>
+        <input
+          className="color-hex"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          spellCheck={false}
+        />
+      </div>
+    </div>
+  );
+}
+
+function LogoField({
+  label,
+  value,
+  onPick,
+  onClear,
+}: {
+  label: string;
+  value: string;
+  onPick: (f: File) => void;
+  onClear: () => void;
+}) {
+  return (
+    <div className="field" style={{ marginBottom: 0 }}>
+      <label>{label}</label>
+      {value ? (
+        <div className="logo-preview">
+          <img src={value} alt={label} />
+          <button className="remove" onClick={onClear}>
+            remover
+          </button>
+        </div>
+      ) : (
+        <label className="logo-drop">
+          <span>+ enviar imagem</span>
+          <input
+            type="file"
+            accept="image/*"
+            style={{ display: "none" }}
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) onPick(f);
+              e.currentTarget.value = "";
+            }}
+          />
+        </label>
+      )}
     </div>
   );
 }

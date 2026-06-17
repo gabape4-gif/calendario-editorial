@@ -139,6 +139,103 @@ body {
   color: var(--accent);
 }
 
+/* Cores */
+.colors {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.color-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--panel-line);
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+.color-field input[type="color"] {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: none;
+  padding: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.color-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.color-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+}
+.color-hex {
+  background: transparent;
+  border: none;
+  color: var(--ink);
+  font-family: "Transducer Medium", sans-serif;
+  font-size: 12px;
+  width: 100%;
+  outline: none;
+  padding: 0;
+}
+
+/* Logos */
+.logo-drop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--panel-line);
+  border-radius: 8px;
+  height: 64px;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 12px;
+  font-family: "Transducer Medium", sans-serif;
+}
+.logo-drop:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.logo-preview {
+  position: relative;
+  border: 1px solid var(--panel-line);
+  border-radius: 8px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  background: #000;
+}
+.logo-preview img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+.logo-preview .remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid var(--panel-line);
+  color: var(--muted);
+  border-radius: 5px;
+  padding: 2px 6px;
+  font-size: 10px;
+  cursor: pointer;
+}
+.logo-preview .remove:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .entry {
   border: 1px solid var(--panel-line);
   border-radius: 8px;
@@ -271,11 +368,30 @@ button.btn.primary:hover {
   line-height: 0.95;
   text-transform: uppercase;
 }
+.poster .head .head-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3mm;
+}
 .poster .head .year {
   font-family: "Transducer Black", sans-serif;
   font-size: 16mm;
   line-height: 0.8;
   color: var(--accent);
+}
+.poster .logo {
+  object-fit: contain;
+  display: block;
+}
+.poster .logo1 {
+  max-height: 14mm;
+  max-width: 60mm;
+  margin-bottom: 3mm;
+}
+.poster .logo2 {
+  max-height: 14mm;
+  max-width: 50mm;
 }
 
 /* Grade de cards */
