@@ -1,0 +1,426 @@
+/* ===== Fontes Transducer (OTF reais embutidas) ===== */
+@font-face {
+  font-family: "Transducer Black";
+  src: url("/fonts/Transducer-ExtendedBlack.otf") format("opentype");
+  font-weight: 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Transducer Bold";
+  src: url("/fonts/Transducer-NormalBold.otf") format("opentype");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Transducer Medium";
+  src: url("/fonts/Transducer-NormalMedium.otf") format("opentype");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Transducer Cond";
+  src: url("/fonts/Transducer-CondensedRegular.otf") format("opentype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Transducer Cond Med";
+  src: url("/fonts/Transducer-CondensedMedium.otf") format("opentype");
+  font-weight: 500;
+  font-display: swap;
+}
+
+:root {
+  --bg: #000000;
+  --ink: #ffffff;
+  --accent: #ff5b23;
+  --muted: #8c8c8c;
+  --line: #2a2a2a;
+  --panel: #111111;
+  --panel-line: #262626;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #0a0a0a;
+  color: var(--ink);
+  font-family: "Transducer Medium", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== Layout da aplicação (tela) ===== */
+.app {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  min-height: 100vh;
+}
+
+.panel {
+  background: var(--panel);
+  border-right: 1px solid var(--panel-line);
+  padding: 28px 24px 80px;
+  overflow-y: auto;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+.panel h1 {
+  font-family: "Transducer Black", sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.5px;
+  margin: 0 0 2px;
+  text-transform: uppercase;
+}
+.panel .sub {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 0 0 24px;
+  font-family: "Transducer Cond", sans-serif;
+}
+
+.field {
+  margin-bottom: 16px;
+}
+.field label {
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  font-family: "Transducer Medium", sans-serif;
+}
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  background: #000;
+  color: var(--ink);
+  border: 1px solid var(--panel-line);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: "Transducer Medium", sans-serif;
+  outline: none;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--accent);
+}
+.field textarea {
+  resize: vertical;
+  min-height: 64px;
+}
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.divider {
+  height: 1px;
+  background: var(--panel-line);
+  margin: 24px 0 20px;
+}
+.section-title {
+  font-family: "Transducer Bold", sans-serif;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 14px;
+  color: var(--accent);
+}
+
+.entry {
+  border: 1px solid var(--panel-line);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 12px;
+  position: relative;
+}
+.entry .entry-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.entry .entry-num {
+  font-family: "Transducer Bold", sans-serif;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+.entry .remove {
+  background: transparent;
+  border: 1px solid var(--panel-line);
+  color: var(--muted);
+  border-radius: 5px;
+  padding: 3px 8px;
+  font-size: 11px;
+  cursor: pointer;
+}
+.entry .remove:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+button.btn {
+  width: 100%;
+  background: transparent;
+  color: var(--ink);
+  border: 1px dashed var(--panel-line);
+  border-radius: 8px;
+  padding: 12px;
+  font-family: "Transducer Bold", sans-serif;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+button.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+button.btn.primary {
+  background: var(--accent);
+  color: #000;
+  border: 1px solid var(--accent);
+  margin-top: 8px;
+}
+button.btn.primary:hover {
+  background: #ff7647;
+  color: #000;
+}
+
+.preview-wrap {
+  padding: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: auto;
+  height: 100vh;
+}
+
+/* ===== O PÔSTER (idêntico em tela e impressão, em mm) ===== */
+.poster {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--bg);
+  color: var(--ink);
+  position: relative;
+  padding: 16mm 14mm 14mm 42mm;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Mês vertical na lateral esquerda */
+.poster .month-side {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 40mm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.poster .month-side span {
+  font-family: "Transducer Black", sans-serif;
+  color: var(--accent);
+  font-size: 34mm;
+  line-height: 0.8;
+  text-transform: uppercase;
+  letter-spacing: -1mm;
+  transform: rotate(-90deg);
+  white-space: nowrap;
+}
+
+/* Cabeçalho */
+.poster .head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 6mm;
+  margin-bottom: 8mm;
+}
+.poster .head .client {
+  max-width: 110mm;
+}
+.poster .head .client .kicker {
+  font-family: "Transducer Medium", sans-serif;
+  font-size: 3mm;
+  letter-spacing: 1mm;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 2mm;
+}
+.poster .head .client .name {
+  font-family: "Transducer Black", sans-serif;
+  font-size: 9mm;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+.poster .head .year {
+  font-family: "Transducer Black", sans-serif;
+  font-size: 16mm;
+  line-height: 0.8;
+  color: var(--accent);
+}
+
+/* Grade de cards */
+.poster .grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 7mm;
+  row-gap: 9mm;
+}
+
+.card {
+  border-top: 0.5mm solid var(--ink);
+  padding-top: 3mm;
+  break-inside: avoid;
+}
+.card .card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.card .day {
+  font-family: "Transducer Black", sans-serif;
+  font-size: 17mm;
+  line-height: 0.78;
+  color: var(--accent);
+}
+.card .weekday {
+  font-family: "Transducer Bold", sans-serif;
+  font-size: 3.4mm;
+  text-transform: uppercase;
+  text-align: right;
+  color: var(--ink);
+  letter-spacing: 0.4mm;
+  padding-top: 1mm;
+}
+.card .fmt {
+  display: inline-block;
+  font-family: "Transducer Medium", sans-serif;
+  font-size: 2.7mm;
+  letter-spacing: 0.8mm;
+  text-transform: uppercase;
+  color: #000;
+  background: var(--accent);
+  padding: 1mm 2mm;
+  margin: 3.5mm 0 2.5mm;
+}
+.card .title {
+  font-family: "Transducer Bold", sans-serif;
+  font-size: 4.6mm;
+  line-height: 1.08;
+  color: var(--ink);
+  word-break: break-word;
+}
+.card .note {
+  font-family: "Transducer Cond", sans-serif;
+  font-size: 3.2mm;
+  line-height: 1.15;
+  color: var(--muted);
+  margin-top: 2mm;
+}
+
+/* Rodapé */
+.poster .foot {
+  position: absolute;
+  left: 42mm;
+  right: 14mm;
+  bottom: 10mm;
+  border-top: 0.4mm solid var(--ink);
+  padding-top: 3mm;
+  display: flex;
+  justify-content: space-between;
+  font-family: "Transducer Cond Med", sans-serif;
+  font-size: 3mm;
+  text-transform: uppercase;
+  letter-spacing: 0.5mm;
+  color: var(--muted);
+}
+.poster .foot .accent {
+  color: var(--accent);
+}
+
+.empty-hint {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-family: "Transducer Cond", sans-serif;
+  font-size: 4mm;
+  text-align: center;
+  padding: 20mm 0;
+}
+
+/* ===== Impressão: só o pôster ===== */
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+@media print {
+  html,
+  body {
+    background: #000 !important;
+  }
+  .app {
+    display: block;
+  }
+  .panel,
+  .preview-wrap > .toolbar {
+    display: none !important;
+  }
+  .preview-wrap {
+    padding: 0;
+    display: block;
+    height: auto;
+    overflow: visible;
+  }
+  .poster {
+    box-shadow: none;
+    margin: 0;
+    width: 210mm;
+    min-height: 297mm;
+  }
+  /* força cores no print */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+.toolbar {
+  width: 210mm;
+  margin: 0 auto 14px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.toolbar button {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-family: "Transducer Bold", sans-serif;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+}
+.toolbar button.ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--panel-line);
+}
