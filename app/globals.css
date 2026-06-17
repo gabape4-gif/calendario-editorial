@@ -297,6 +297,19 @@ button.btn.primary:hover {
   color: #000;
 }
 
+.print-hint {
+  font-family: "Transducer Cond", sans-serif;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--muted);
+  margin: 10px 2px 0;
+}
+.print-hint b {
+  color: var(--ink);
+  font-family: "Transducer Cond Med", sans-serif;
+  font-weight: 500;
+}
+
 .preview-wrap {
   padding: 32px;
   display: flex;
@@ -507,6 +520,15 @@ button.btn.primary:hover {
     margin: 0;
     width: 210mm;
     min-height: 297mm;
+    overflow: visible; /* deixa paginar em vez de cortar o conteúdo */
+  }
+  .poster .month-side {
+    position: absolute; /* mês acompanha a 1ª página */
+  }
+  .card,
+  .poster .head,
+  .poster .foot {
+    break-inside: avoid;
   }
   /* força cores no print */
   * {

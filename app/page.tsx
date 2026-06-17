@@ -317,6 +317,11 @@ export default function Home() {
         <button className="btn primary" onClick={() => window.print()}>
           ⤓ Baixar PDF
         </button>
+        <p className="print-hint">
+          No diálogo, ajuste: <b>Margens → Nenhuma</b>, marque{" "}
+          <b>Gráficos de plano de fundo</b> e deixe <b>Escala → Padrão (100%)</b>.
+          Isso evita cortar as bordas do pôster.
+        </p>
       </aside>
 
       {/* ---------- PREVIEW / PÔSTER ---------- */}
