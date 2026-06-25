@@ -30,12 +30,18 @@ type Entrada = {
   nota: string;
 };
 
-function daysInMonth(ano: number, mes: number) {
+// mes pode ser "" (em branco) — nesse caso o calendário não fica preso a um mês específico
+type Mes = number | "";
+
+function daysInMonth(ano: number, mes: Mes) {
+  if (mes === "") return 31; // sem mês definido: libera todos os dias possíveis
   return new Date(ano, mes + 1, 0).getDate();
 }
 
 // Abreviação do dia da semana sincronizada com o calendário real
-function weekdayAbbr(ano: number, mes: number, dia: number) {
+// Com o mês em branco não há dia da semana definido, então retorna vazio
+function weekdayAbbr(ano: number, mes: Mes, dia: number) {
+  if (mes === "") return "";
   return SEMANA[new Date(ano, mes, dia).getDay()];
 }
 
@@ -65,7 +71,7 @@ export default function Home() {
   const hoje = new Date();
   const [cliente, setCliente] = useState("Nome do Cliente");
   const [ano, setAno] = useState(hoje.getFullYear());
-  const [mes, setMes] = useState(hoje.getMonth());
+  const [mes, setMes] = useState<Mes>(hoje.getMonth());
   const [contato, setContato] = useState("");
   const [entradas, setEntradas] = useState<Entrada[]>([
     { id: uid(), dia: 1, titulo: "", formato: "Post Único", nota: "" },
@@ -83,7 +89,7 @@ export default function Home() {
         const d = JSON.parse(raw);
         if (d.cliente !== undefined) setCliente(d.cliente);
         if (typeof d.ano === "number") setAno(d.ano);
-        if (typeof d.mes === "number") setMes(d.mes);
+        if (d.mes === "" || typeof d.mes === "number") setMes(d.mes);
         if (d.contato !== undefined) setContato(d.contato);
         if (d.cores) setCores({ ...CORES_PADRAO, ...d.cores });
         if (d.logo1 !== undefined) setLogo1(d.logo1);
@@ -162,7 +168,13 @@ export default function Home() {
         <div className="row2">
           <div className="field">
             <label>Mês</label>
-            <select value={mes} onChange={(e) => setMes(Number(e.target.value))}>
+            <select
+              value={mes}
+              onChange={(e) =>
+                setMes(e.target.value === "" ? "" : Number(e.target.value))
+              }
+            >
+              <option value="">— Em branco —</option>
               {MESES.map((m, i) => (
                 <option key={m} value={i}>
                   {m}
@@ -247,8 +259,9 @@ export default function Home() {
           <div className="entry" key={e.id}>
             <div className="entry-head">
               <span className="entry-num">
-                #{idx + 1} ·{" "}
-                {weekdayAbbr(ano, mes, Math.min(e.dia, totalDias))}
+                #{idx + 1}
+                {mes !== "" &&
+                  ` · ${weekdayAbbr(ano, mes, Math.min(e.dia, totalDias))}`}
               </span>
               <button
                 className="remove"
@@ -269,7 +282,8 @@ export default function Home() {
                 >
                   {Array.from({ length: totalDias }, (_, i) => i + 1).map((d) => (
                     <option key={d} value={d}>
-                      {String(d).padStart(2, "0")} — {weekdayAbbr(ano, mes, d)}
+                      {String(d).padStart(2, "0")}
+                      {mes !== "" && ` — ${weekdayAbbr(ano, mes, d)}`}
                     </option>
                   ))}
                 </select>
@@ -344,7 +358,7 @@ export default function Home() {
           }
         >
           <div className="month-side">
-            <span>{MESES[mes]}</span>
+            <span>{mes === "" ? "" : MESES[mes]}</span>
           </div>
 
           <div className="head">
@@ -384,7 +398,7 @@ export default function Home() {
 
           <div className="foot">
             <span>
-              {MESES[mes]} · {ano}
+              {mes === "" ? ano : `${MESES[mes]} · ${ano}`}
             </span>
             <span className="accent">{contato || cliente}</span>
           </div>
